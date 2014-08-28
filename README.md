@@ -1,88 +1,59 @@
 aircrack-ngui
 =============
 
-NOTE: THIS SOFTWARE IS DESIGNED FOR EDUCATIONAL ENVIRONMENTS AND LICENSED PENETRATION TESTING. I AM NOT RESPONSIBLE IF YOU USE THIS SOFTWARE TO ATTACK AN UNAUTHORIZED NETWORK/COMPUTER.
+<b>DISCLAIMER: THIS SOFTWARE IS DESIGNED FOR EDUCATIONAL ENVIRONMENTS AND LICENSED PENETRATION TESTING. I AM NOT RESPONSIBLE IF YOU USE THIS SOFTWARE TO ATTACK AN UNAUTHORIZED NETWORK/DEVICE.</b>
 
 Aircrack-NGUI is a graphical interface for popular computer security and penetration testing tools for the GNU/Linux operating system. It can be used both as an educational tool and in a production environment. Several of these tools include:
 
-1. arpspoof
-
-2. Aircrack-NG suite
-
-2a. easside-ng
-
-2b. wesside-ng
-
-2c. aircrack-ng
-
-2d. airmon-ng
-
-2e. airodump-ng
-
-2f. packetforge-ng
-
-2g. airgraph-ng
-
-2h. aireplay-ng
-
-2i. airolib-ng
-
-3. nmap
-
-4. ifconfig/iwconfig
-
-5. dig
-
-6. ping
-
-7. telnet
-
-8. traceroute
-
-9. whois
-
-10. hping3
-
-11. macchanger
-
-12. nikto
-
-13. reaver/wash
-
-14. wireshark
-
-15. Metasploit Framework
-
-16. dsniff
-
-17. tcpdump
+<ul>
+<li>arpspoof</li>
+<li>Aircrack-NG suite</li>
+<ul>
+<li>easside-ng</li>
+<li>wesside-ng</li>
+<li>aircrack-ng</li>
+<li>airmon-ng</li>
+<li>airodump-ng</li>
+<li>packetforge-ng</li>
+<li>airgraph-ng</li>
+<li>aireplay-ng</li>
+<li>airolib-ng</li>
+</ul>
+<li>nmap</li>
+<li>ifconfig/iwconfig</li>
+<li>dig</li>
+<li>ping</li>
+<li>telnet</li>
+<li>traceroute</li>
+<li>whois</li>
+<li>hping3</li>
+<li>macchanger</li>
+<li>nikto</li>
+<li>reaver/wash</li>
+<li>wireshark</li>
+<li>Metasploit Framework</li>
+<li>dsniff</li>
+<li>tcpdump</li>
+</ul>
 
 The following tools/features are planned but haven't been implemented yet:
 
-1. Defense tools (detecting arpspoofing, for example)
-
-2. airbase-ng
-
-3. airdecap-ng
-
-4. airdecloak-ng
-
-5. airdriver-ng
-
-6. airdrop-ng
-
-7. airserv-ng
-
-8. airtun-ng
-
-9. BURP suite
-
-10. SQL Scan
-
-11. SQL Map
-
-12. TOR Network
-
-13. Evilgrade
-
-14. MDK (Murder Death Kill)
+<ul>
+<li>Defense tools (detecting arpspoofing, for example)</li>
+<li>Aircrack-NG tools</li>
+<ul>
+<li>airbase-ng</li>
+<li>airdecap-ng</li>
+<li>airdecloak-ng</li>
+<li>airdriver-ng</li>
+<li>airdrop-ng</li>
+<li>airserv-ng</li>
+<li>airtun-ng</li>
+</ul>
+<li>BURP suite</li>
+<li>SQL Scan</li>
+<li>SQL Map</li>
+<li>TOR Network</li>
+<li>Evilgrade</li>
+<li>MDK (Murder Death Kill)</li>
+</ul>
