@@ -90,6 +90,10 @@ public class FOtherToolsBasicToolsTelnet extends CAircrackWindow implements Acti
 			
 			m_btnGo = CUtilities.AddButton(m_cntControlContainer, this, "Go", 270, 170, 18, 100);
 			
+			m_cboForceIPVersion.AddItemToList("4", 4);
+			m_cboForceIPVersion.AddItemToList("6", 6);
+			m_cboForceIPVersion.SetSelectedIndex(0);
+			
 			m_lstParameters.add(new CProfileParameter("Target", m_txtTarget));
 			m_lstParameters.add(new CProfileParameter("Port", m_txtPort));
 			m_lstParameters.add(new CProfileParameter("Request8BitOperation", m_chkRequest8BitOperation));
@@ -138,25 +142,39 @@ public class FOtherToolsBasicToolsTelnet extends CAircrackWindow implements Acti
 	{
 		try
 		{
-			String astrCommand[] = new String[] {"telnet"};
-			String strTarget = m_txtTarget.getText( ).trim( );
-			String strPort = m_txtPort.getText( ).trim( );
-			astrCommand = CAircrackUtilities.AddArgumentToArray(strTarget, astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentToArray(strPort, astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkRequest8BitOperation, "8", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDisableEscapeCharacter, "E", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chk8BitOutputDataPath, "L", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkAttemptAutomaticLogin, "a", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDebuggingMode, "d", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkEmulateRlogin, "r", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkForceIPVersion, m_cboForceIPVersion.GetSelectedItemName( ), "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkBindLocalSocket, "b", m_txtBindLocalSocket.getText( ).trim( ), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkTypeOfService, "S", m_txtTypeOfService.getText( ).trim( ), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkEscapeCharacter, "e", m_txtEscapeCharacter.getText( ).trim( ), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkLoginName, "l", m_txtLoginName.getText( ).trim( ), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkTraceFile, "n", m_txtTraceFile.getText( ).trim( ), astrCommand);
+			CTelnetProcess clsTelnet = new CTelnetProcess();
+			clsTelnet.SetTarget(m_txtTarget.getText().trim(), Integer.parseInt(m_txtPort.getText().trim()));
+			if (m_chkRequest8BitOperation.isSelected())
+				clsTelnet.Enable8BitOperation();
+			if (m_chkDisableEscapeCharacter.isSelected())
+				clsTelnet.DisableEscapeCharacter();
+			if (m_chkAttemptAutomaticLogin.isSelected())
+				clsTelnet.AttemptAutomaticLogin();
+			if (m_chkDebuggingMode.isSelected())
+				clsTelnet.EnableDebuggingMode();
+			if (m_chkEmulateRlogin.isSelected())
+				clsTelnet.EmulateRLogin();
+			if (m_chkForceIPVersion.isSelected())
+			{
+				if (m_cboForceIPVersion.GetSelectedItemValue() == 4)
+					clsTelnet.SetIPVersion(CTelnetProcess.udtForceIPVersionType.IPV4);
+				else if (m_cboForceIPVersion.GetSelectedItemValue() == 6)
+					clsTelnet.SetIPVersion(CTelnetProcess.udtForceIPVersionType.IPV6);
+			}
+			if (m_chkBindLocalSocket.isSelected())
+				clsTelnet.SetBindLocalSocket(m_txtBindLocalSocket.getText().trim());
+			if (m_chkTypeOfService.isSelected())
+				clsTelnet.SetTypeOfService(m_txtTypeOfService.getText().trim());
+			if (m_chkEscapeCharacter.isSelected())
+				clsTelnet.SetEscapeCharacter(m_txtEscapeCharacter.getText().trim().charAt(0));
+			if (m_chkLoginName.isSelected())
+				clsTelnet.SetLoginName(m_txtLoginName.getText().trim());
+			if (m_chkTraceFile.isSelected())
+				clsTelnet.SetTraceFile(m_txtTraceFile.getText().trim());
 			
-			DProgramOutput dlgTelnet = new DProgramOutput( "Telnet", astrCommand, true );
+			clsTelnet.StartTelnet();
+			
+			DProgramOutput dlgTelnet = new DProgramOutput("Telnet", clsTelnet, true);
 			dlgTelnet.setVisible( true );
 		}
 		catch (Exception excError)
