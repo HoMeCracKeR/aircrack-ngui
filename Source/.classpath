@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Add-Remove Utilities"/>
+	<classpathentry kind="src" path="ARP Poison Routing"/>
+	<classpathentry kind="src" path="Attacks"/>
+	<classpathentry kind="src" path="Classes"/>
+	<classpathentry kind="src" path="Communicate With AP"/>
+	<classpathentry kind="src" path="Controls"/>
+	<classpathentry kind="src" path="Crack WEP-WPA Keys"/>
+	<classpathentry kind="src" path="Dialogs"/>
+	<classpathentry kind="src" path="Discover Hosts"/>
+	<classpathentry kind="src" path="Discover Networks"/>
+	<classpathentry kind="src" path="Forge Packets"/>
+	<classpathentry kind="src" path="Graph Network"/>
+	<classpathentry kind="src" path="Network Interfaces"/>
+	<classpathentry kind="src" path="Other Tools - Basic Tools - Dig"/>
+	<classpathentry kind="src" path="Other Tools - Basic Tools - Ping"/>
+	<classpathentry kind="src" path="Other Tools - Basic Tools - Telnet"/>
+	<classpathentry kind="src" path="Other Tools - Basic Tools - TraceRoute"/>
+	<classpathentry kind="src" path="Other Tools - Basic Tools - WhoIs"/>
+	<classpathentry kind="src" path="Other Tools - HPing"/>
+	<classpathentry kind="src" path="Other Tools - MAC Changer"/>
+	<classpathentry kind="src" path="Other Tools - Nikto"/>
+	<classpathentry kind="src" path="Other Tools - Reaver"/>
+	<classpathentry kind="src" path="Other Tools - Wireshark"/>
+	<classpathentry kind="src" path="Processes"/>
+	<classpathentry kind="src" path="Quick Exploit"/>
+	<classpathentry kind="src" path="Replay-Inject Packets"/>
+	<classpathentry kind="src" path="Settings"/>
+	<classpathentry kind="src" path="Sniff Passwords"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="TCPDump"/>
+	<classpathentry kind="src" path="WPA Dictionary"/>
+	<classpathentry kind="src" path="XML"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
