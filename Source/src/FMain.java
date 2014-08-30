@@ -21,15 +21,37 @@ public class FMain extends CAircrackWindow
     private JMenuItem m_miAddRemoveUtilities = null;
     private JMenuItem m_miNetworkDevices = null;
     private JMenuItem m_miSettings = null;
-    private JMenuItem m_miCreateWPAHashDictionary = null;
-    private JMenu m_mnuCoverYourAss = null;
     private JMenuItem m_miExit = null;
+    
+    private JMenu m_mnuSuites = null;
+    
+    // Aircrack-NG
+    private JMenu m_mnuAircrackNG = null;
+    private JMenuItem m_miManageDrivers = null;  // airdriver
+    private JMenuItem m_miWirelessCardServer = null; //airserv
+    private JMenuItem m_miVirtualTunnel = null; // airtun
+    private JMenuItem m_miCreateWPAHashDictionary = null;
+    private JMenuItem m_miDiscoverNetworks = null;
+    private JMenuItem m_miGraphNetwork = null;
+    private JMenuItem m_miDeauthenticateHosts = null; // airdrop
+    private JMenuItem m_miReplayInjectPackets = null;
+    private JMenuItem m_miDecloakWEPWPAKey = null; // airdecloak
+    private JMenuItem m_miCrackWEPWPAKey = null;
+    private JMenuItem m_miCommunicatewithAccessPoint = null;
+    private JMenuItem m_miCreateFakeAccessPoint = null; // airbase
+    private JMenuItem m_miForgePackets = null;
+    
+    // DSniff
+    private JMenu m_mnuDSniff = null;
+    private JMenuItem m_miSniffFiles = null;
+    private JMenuItem m_miSniffMail = null;
+    private JMenuItem m_miSniffMessages = null;
+    private JMenuItem m_miSniffURLs = null;
+    private JMenuItem m_miWebSpy = null;
     
     // Recon
     private JMenu m_mnuRecon = null;
-    private JMenuItem m_miDiscoverNetworks = null;
     private JMenuItem m_miDiscoverHosts = null;
-    private JMenuItem m_miGraphNetwork = null;
     private JMenuItem m_miPing = null;
     private JMenuItem m_miDig = null;
     private JMenuItem m_miTraceRoute = null;
@@ -37,10 +59,6 @@ public class FMain extends CAircrackWindow
     
     // Exploit
     private JMenu m_mnuExploit = null;
-    private JMenuItem m_miReplayInjectPackets = null;
-    private JMenuItem m_miCrackWEPWPAKey = null;
-    private JMenuItem m_miCommunicatewithAccessPoint = null;
-    private JMenuItem m_miForgePackets = null;
     private JMenuItem m_miARPPoisonRouting = null;
     private JMenu m_mnuMetasploitFramework = null;
     private JMenuItem m_miUpdateMetasploit = null;
@@ -53,6 +71,11 @@ public class FMain extends CAircrackWindow
     private JMenu m_mnuPostExploit = null;
     private JMenuItem m_miSniffPasswords = null;
     
+    // Defense
+    private JMenu m_mnuDefense = null;
+    private JMenuItem m_miMACChanger = null;
+    private JMenuItem m_miTORNetwork = null;
+    
     // Other Tools
     private JMenu m_mnuOtherTools = null;
     
@@ -63,13 +86,11 @@ public class FMain extends CAircrackWindow
     private JMenuItem m_miNikto = null;
     private JMenuItem m_miHydra = null;
     private JMenuItem m_miHping = null;
-    private JMenuItem m_miMACChanger = null;
     private JMenuItem m_miSSLStrip = null;
     private JMenuItem m_miTCPDump = null;
     private JMenuItem m_miSQLScan = null;
     private JMenuItem m_miSQLMap = null;
     private JMenuItem m_miSQLNinja = null;
-    private JMenuItem m_miTORNetwork = null;
     private JMenuItem m_miReaver = null;
     
     // --------------------------------------------------------------------------------
@@ -140,22 +161,44 @@ public class FMain extends CAircrackWindow
             m_miAddRemoveUtilities = CAircrackUtilities.CreateMenuItem("Add/Remove Utilities", 'A', m_mnuSetup, this);
             m_miNetworkDevices = CAircrackUtilities.CreateMenuItem("Network Devices", 'N', m_mnuSetup, this);
             m_miSettings = CAircrackUtilities.CreateMenuItem("Settings", 'e', m_mnuSetup, this);
-            m_miCreateWPAHashDictionary = CAircrackUtilities.CreateMenuItem("WPA Dictionary", 'W', m_mnuSetup, this);
-            m_mnuCoverYourAss = new JMenu("Cover Your Ass");
-            m_mnuCoverYourAss.setMnemonic('C');
-            m_miMACChanger = CAircrackUtilities.CreateMenuItem("MAC Changer", 'c', m_mnuCoverYourAss, this);
-            m_miTORNetwork = CAircrackUtilities.CreateMenuItem("TOR Network", 'O', m_mnuCoverYourAss, this);
-            m_mnuSetup.add(m_mnuCoverYourAss);
             m_mnuSetup.addSeparator( );
             m_miExit = CAircrackUtilities.CreateMenuItem("Exit", 'x', m_mnuSetup, this);
             m_mnbMainMenu.add(m_mnuSetup);
             
+            m_mnuSuites = new JMenu("Suites");
+            m_mnuAircrackNG = new JMenu("Aircrack-NG");
+            m_mnuAircrackNG.setMnemonic('A');
+            m_miManageDrivers = CAircrackUtilities.CreateMenuItem("Manage Drivers", 'M', m_mnuAircrackNG, this);
+            m_miWirelessCardServer = CAircrackUtilities.CreateMenuItem("Wireless Card Server", 'I', m_mnuAircrackNG, this);
+            m_miVirtualTunnel = CAircrackUtilities.CreateMenuItem("Virtual Tunnel", 'V', m_mnuAircrackNG, this);
+            m_miCreateFakeAccessPoint = CAircrackUtilities.CreateMenuItem("Create Fake Access Point", 'P', m_mnuAircrackNG, this);
+            m_miDiscoverNetworks = CAircrackUtilities.CreateMenuItem("Discover Networks", 'N', m_mnuAircrackNG, this);
+            m_miGraphNetwork = CAircrackUtilities.CreateMenuItem("Graph Network", 'G', m_mnuAircrackNG, this);
+            m_miForgePackets = CAircrackUtilities.CreateMenuItem("Forge Packets", 'F', m_mnuAircrackNG, this);
+            m_miDeauthenticateHosts = CAircrackUtilities.CreateMenuItem("Deauthenticate Hosts", 'D', m_mnuAircrackNG, this);
+            m_miReplayInjectPackets = CAircrackUtilities.CreateMenuItem("Replay/Inject Packets", 'R', m_mnuAircrackNG, this);
+            m_miCreateWPAHashDictionary = CAircrackUtilities.CreateMenuItem("WPA Dictionary", 'W', m_mnuAircrackNG, this);
+            m_miCommunicatewithAccessPoint = CAircrackUtilities.CreateMenuItem("Communciate w/AP", 'C', m_mnuAircrackNG, this);
+            m_miDecloakWEPWPAKey = CAircrackUtilities.CreateMenuItem("Decloak WEP/WPA Key", 'E', m_mnuAircrackNG, this);
+            m_miCrackWEPWPAKey = CAircrackUtilities.CreateMenuItem("Crack WEP/WPA Key", 'K', m_mnuAircrackNG, this);
+            m_mnuSuites.add(m_mnuAircrackNG);
+            
+            m_mnuDSniff = new JMenu("DSniff");
+            m_mnuDSniff.setMnemonic('D');
+            m_miSniffPasswords = CAircrackUtilities.CreateMenuItem("Sniff Passwords", 'P', m_mnuDSniff, this);
+            m_miSniffFiles = CAircrackUtilities.CreateMenuItem("Sniff Files", 'F', m_mnuDSniff, this);
+            m_miSniffMail = CAircrackUtilities.CreateMenuItem("Sniff Mail", 'M', m_mnuDSniff, this);
+            m_miSniffMessages = CAircrackUtilities.CreateMenuItem("Sniff Messages", 'E', m_mnuDSniff, this);
+            m_miSniffURLs = CAircrackUtilities.CreateMenuItem("Sniff URLs", 'U', m_mnuDSniff, this);
+            m_miWebSpy = CAircrackUtilities.CreateMenuItem("Web Spy", 'W', m_mnuDSniff, this);
+            m_mnuSuites.add(m_mnuDSniff);
+            m_mnbMainMenu.add(m_mnuSuites);
+            
             m_mnuRecon = new JMenu("Recon");
             m_mnuRecon.setMnemonic('R');
-            m_miDiscoverNetworks = CAircrackUtilities.CreateMenuItem("Discover Networks", 'N', m_mnuRecon, this);
+            
             m_miDiscoverHosts = CAircrackUtilities.CreateMenuItem("Discover Hosts", 'H', m_mnuRecon, this);
             m_miWireshark = CAircrackUtilities.CreateMenuItem("Wireshark", 'W', m_mnuRecon, this);
-            m_miGraphNetwork = CAircrackUtilities.CreateMenuItem("Graph Network", 'g', m_mnuRecon, this);
             m_miPing = CAircrackUtilities.CreateMenuItem("Ping", 'P', m_mnuRecon, this);
             m_miDig = CAircrackUtilities.CreateMenuItem("Dig", 'D', m_mnuRecon, this);
             m_miTraceRoute = CAircrackUtilities.CreateMenuItem("Trace Route", 'R', m_mnuRecon, this);
@@ -166,32 +209,32 @@ public class FMain extends CAircrackWindow
     
             m_mnuExploit = new JMenu("Exploit");
             m_mnuExploit.setMnemonic('E');
-            m_miReplayInjectPackets = CAircrackUtilities.CreateMenuItem("Replay/Inject Packets", 'R', m_mnuExploit, this);
-            m_miCommunicatewithAccessPoint = CAircrackUtilities.CreateMenuItem("Communciate w/AP", 'C', m_mnuExploit, this);
-            m_miForgePackets = CAircrackUtilities.CreateMenuItem("Forge Packets", 'F', m_mnuExploit, this);
-            m_miARPPoisonRouting = CAircrackUtilities.CreateMenuItem("ARP Poison Routing", 'A', m_mnuExploit, this);
             m_mnuMetasploitFramework = new JMenu("Metasploit");
             m_mnuMetasploitFramework.setMnemonic('M');
             m_miUpdateMetasploit = CAircrackUtilities.CreateMenuItem("MSF Update", 'U', m_mnuMetasploitFramework, this);
             m_miLaunchMSFConsole = CAircrackUtilities.CreateMenuItem("MSF Console", 'C', m_mnuMetasploitFramework, this);
             m_miLaunchMSFGUI = CAircrackUtilities.CreateMenuItem("MSF GUI", 'G', m_mnuMetasploitFramework, this);
             m_miLaunchArmitage = CAircrackUtilities.CreateMenuItem("Armitage", 'A', m_mnuMetasploitFramework, this);
+            m_mnuExploit.add(m_mnuMetasploitFramework);
+            m_miARPPoisonRouting = CAircrackUtilities.CreateMenuItem("ARP Poison Routing", 'A', m_mnuExploit, this);
             m_miQuickExploit  = CAircrackUtilities.CreateMenuItem("Quick Exploit", 'Q', m_mnuMetasploitFramework, this);
             m_miBURPSuite = CAircrackUtilities.CreateMenuItem("BURP Suite", 'u', m_mnuExploit, this);
             m_miReaver = CAircrackUtilities.CreateMenuItem("Reaver", 'v', m_mnuExploit, this);
-            m_mnuExploit.add(m_mnuMetasploitFramework);
             m_mnbMainMenu.add(m_mnuExploit);
             
             m_mnuPostExploit = new JMenu("Post-Exploit");
-            m_miSniffPasswords = CAircrackUtilities.CreateMenuItem("Sniff Passwords", 'S', m_mnuPostExploit, this);
-            m_miCrackWEPWPAKey = CAircrackUtilities.CreateMenuItem("Crack WEP/WPA Key", 'W', m_mnuPostExploit, this);
             m_miTelnet = CAircrackUtilities.CreateMenuItem("Telnet", 'T', m_mnuPostExploit, this);
             m_miTCPDump = CAircrackUtilities.CreateMenuItem("TCP Dump", 'T', m_mnuPostExploit, this);
             m_mnbMainMenu.add(m_mnuPostExploit);
             
+            m_mnuDefense = new JMenu("Defense");
+            m_mnuDefense.setMnemonic('D');
+            m_miMACChanger = CAircrackUtilities.CreateMenuItem("MAC Changer", 'c', m_mnuDefense, this);
+            m_miTORNetwork = CAircrackUtilities.CreateMenuItem("TOR Network", 'O', m_mnuDefense, this);
+            m_mnbMainMenu.add(m_mnuDefense);
+            
             m_mnuOtherTools = new JMenu("Other Tools");
             m_mnuOtherTools.setMnemonic('O');
-
             m_miNetstat = CAircrackUtilities.CreateMenuItem("Netstat", 'N', m_mnuOtherTools, this);
             m_miHydra = CAircrackUtilities.CreateMenuItem("Hydra", 'H', m_mnuOtherTools, this);
             m_miSSLStrip = CAircrackUtilities.CreateMenuItem("SSL Strip", 'S', m_mnuOtherTools, this);
@@ -249,7 +292,7 @@ public class FMain extends CAircrackWindow
             m_miTCPDump.setEnabled( clsLocalMachine.ProgramInstalled( "tcpdump" ) );
             
             m_miWireshark.setEnabled( clsLocalMachine.ProgramInstalled( "wireshark" ) );
-            m_miMACChanger.setEnabled( clsLocalMachine.ProgramInstalled( "macchanger" ) );
+            // m_miMACChanger.setEnabled( clsLocalMachine.ProgramInstalled( "macchanger" ) );
             m_miReaver.setEnabled( clsLocalMachine.ProgramInstalled( "reaver" ) );
             
             m_mnuMetasploitFramework.setEnabled(clsLocalMachine.OneOfProgramsInstalled(new String[] {"msfupdate", "msfconsole", "msfgui", "armitage", "msfconsole"}));
@@ -273,7 +316,19 @@ public class FMain extends CAircrackWindow
     {
     	try
     	{
+    		m_miManageDrivers.setEnabled(false);
+    		m_miWirelessCardServer.setEnabled(false);
     		m_miCommunicatewithAccessPoint.setEnabled( false );
+    		m_miVirtualTunnel.setEnabled(false);
+    		m_miCreateFakeAccessPoint.setEnabled(false);
+    		m_miDecloakWEPWPAKey.setEnabled(false);
+    		
+    		m_miSniffFiles.setEnabled(false);
+    	    m_miSniffMail.setEnabled(false);
+    	    m_miSniffMessages.setEnabled(false);
+    	    m_miSniffURLs.setEnabled(false);
+    	    m_miWebSpy.setEnabled(false);
+    		
             m_miNetstat.setEnabled( false );
             m_miBURPSuite.setEnabled( false );
             m_miHydra.setEnabled( false );
