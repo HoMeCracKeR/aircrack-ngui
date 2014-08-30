@@ -195,10 +195,9 @@ public class FCommunicateWithAP extends CAircrackWindow
 		try
 		{
 			/*
-			String astrEasside[] = BuildEassideNGCommand( );
-			
+			CEassideNGProcess clsEassideNG = BuildEassideNGCommand( );
 			m_txaBuddyNGOutput.setText( "Starting Buddy-NG...\n" );
-			m_prcBuddyNGProcess = CAircrackUtilities.BuildAndStartProcess(new String[] {"buddy-ng"}, true, false);
+			clsEassideNG.Start();
 			m_isrBuddyNGProcess = new InputStreamReader( m_prcBuddyNGProcess.getInputStream( ) );
 			
 			m_txaEassideNGOutput.setText( "Starting Easside-NG...\n");
@@ -207,7 +206,7 @@ public class FCommunicateWithAP extends CAircrackWindow
 
 			m_timUpdateTextAreas = new java.util.Timer( );
 			m_timUpdateTextAreas.schedule(new CUpdateTextAreas(), 1000);
-			*/
+			 */
 		}
 		catch (Exception excError)
 		{
@@ -219,30 +218,30 @@ public class FCommunicateWithAP extends CAircrackWindow
 	// Name: BuildEassideNGCommand
 	// Abstract: Starts the communication attack
 	// --------------------------------------------------------------------------------
-	private String[] BuildEassideNGCommand( )
+	private CEassideNGProcess BuildEassideNGCommand( )
 	{
 		
-		String astrEasside[] = new String[] {"easside-ng"};
+		CEassideNGProcess clsEasside = new CEassideNGProcess();
 		try
 		{
-			astrEasside = CAircrackUtilities.AddArgumentToCommand("f", m_cboWirelessInterface.GetSelectedItemName( ), astrEasside);
-			astrEasside = CAircrackUtilities.AddArgumentToCommand("s", m_txtBuddyNGServerIP.getText().trim(), astrEasside);
+			clsEasside.SetInterface(m_cboWirelessInterface.GetSelectedItemName());
+			clsEasside.SetBuddyNGServerIP(m_txtBuddyNGServerIP.getText().trim());
 			if ( m_chkVictimMAC.isSelected( ) == true )
-				astrEasside = CAircrackUtilities.AddArgumentToCommand("v", m_txtVictimMAC.getText(), astrEasside);
+				clsEasside.SetVictimMAC(m_txtVictimMAC.getText());
 			if ( m_chkSourceMAC.isSelected( ) == true )
-				astrEasside = CAircrackUtilities.AddArgumentToCommand("m", m_txtSourceMAC.getText(), astrEasside);
+				clsEasside.SetSourceMAC(m_txtSourceMAC.getText());
 			if ( m_chkSourceIP.isSelected( ) == true )
-				astrEasside = CAircrackUtilities.AddArgumentToCommand("i", m_txtSourceIP.getText(), astrEasside);
+				clsEasside.SetSourceIP(m_txtSourceIP.getText());
 			if ( m_chkRouterIP.isSelected( ) == true )
-				astrEasside = CAircrackUtilities.AddArgumentToCommand("r", m_txtRouterIP.getText(), astrEasside);
+				clsEasside.SetRouterIP(m_txtRouterIP.getText());
 			if ( m_chkChannel.isSelected( ) == true )
-				astrEasside = CAircrackUtilities.AddArgumentToCommand("c", String.valueOf(m_cboChannel.GetSelectedItemValue( )), astrEasside);
+				clsEasside.SetChannel(m_cboChannel.GetSelectedItemValue());
 		}
 		catch (Exception excError)
 		{
 			CUtilities.WriteLog(excError);
 		}
-		return astrEasside;
+		return clsEasside;
 	}
 
 	// --------------------------------------------------------------------------------
