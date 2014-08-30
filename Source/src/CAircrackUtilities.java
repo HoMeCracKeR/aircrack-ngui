@@ -11,11 +11,14 @@ import java.io.*; // BufferedReader, IOException, InputStreamReader
 import javax.swing.*;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CAircrackUtilities
 {
     
 	private static HashMap<String, String> m_mapProgramMappings = new HashMap<String, String>();
+	private static final Pattern m_ptnMACAddressFormat = Pattern.compile("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}"); 
 	
 	// --------------------------------------------------------------------------------
 	// Name: BuildProgramMappings
@@ -882,5 +885,25 @@ public class CAircrackUtilities
 			CUtilities.WriteLog(excError);
 		}
 		return strValue;
+	}
+	
+	public static Pattern GetMACAddressFormat()
+	{
+		return m_ptnMACAddressFormat;
+	}
+	
+	public static boolean ValidMACAddress(String strMAC)
+	{
+		boolean blnValid = false;
+		try
+		{
+			Matcher mhrMatcher = m_ptnMACAddressFormat.matcher(strMAC);
+			blnValid = mhrMatcher.find();
+		}
+		catch (Exception excError)
+		{
+			CUtilities.WriteLog(excError);
+		}
+		return blnValid;
 	}
 }

@@ -16,6 +16,9 @@ public class FMain extends CAircrackWindow
     // Main Menu
     private JMenuBar m_mnbMainMenu = null;
     
+    // Desktop pane (used for MDI)
+    private JDesktopPane m_dtpDesktopPane = null;
+    
     // Setup
     private JMenu m_mnuSetup = null;
     private JMenuItem m_miAddRemoveUtilities = null;
@@ -292,7 +295,7 @@ public class FMain extends CAircrackWindow
             m_miTCPDump.setEnabled( clsLocalMachine.ProgramInstalled( "tcpdump" ) );
             
             m_miWireshark.setEnabled( clsLocalMachine.ProgramInstalled( "wireshark" ) );
-            // m_miMACChanger.setEnabled( clsLocalMachine.ProgramInstalled( "macchanger" ) );
+            m_miMACChanger.setEnabled( clsLocalMachine.ProgramInstalled( "macchanger" ) );
             m_miReaver.setEnabled( clsLocalMachine.ProgramInstalled( "reaver" ) );
             
             m_mnuMetasploitFramework.setEnabled(clsLocalMachine.OneOfProgramsInstalled(new String[] {"msfupdate", "msfconsole", "msfgui", "armitage", "msfconsole"}));

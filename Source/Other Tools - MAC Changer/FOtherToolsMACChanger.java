@@ -173,26 +173,12 @@ public class FOtherToolsMACChanger extends CAircrackWindow implements ActionList
 		try
 		{
 			String strSelectedInterface = m_aclsNetworkInterfaces[m_cboInterfaces.GetSelectedItem().GetValue()].GetInterface();
-			String astrCommand[] = new String[] {"macchanger", "-s", strSelectedInterface};
-			CProcess clsInterfaceInformation = new CProcess(astrCommand, true, true, false);
-			BufferedReader brOutput = new BufferedReader( clsInterfaceInformation.GetOutput( ) );
-			String strCurrentInformation = brOutput.readLine().replaceAll("Current MAC: ", "").trim();
-
-			Matcher mhrMatcher = m_ptnMACAddressFormat.matcher(strCurrentInformation);
-			if (mhrMatcher.find( ))
+			CMACChangerProcess clsMACChanger = new CMACChangerProcess();
+			String astrResult[] = clsMACChanger.GetInterfaceMACAndManufacturer(strSelectedInterface);
+			if (astrResult != null)
 			{
-				MatchResult rstResult = mhrMatcher.toMatchResult();
-				int intMACStartIndex = rstResult.start();
-				int intMACEndIndex = rstResult.end();
-				
-				m_lblCurrentMACAddress.setText(m_strCURRENT_MAC_ADDRESS_HEADER + strCurrentInformation.substring(intMACStartIndex, intMACEndIndex));
-				m_lblCurrentManufacturer.setText(m_strCURRENT_MANUFACTURER_HEADER + strCurrentInformation.substring(strCurrentInformation.indexOf("(") + 1, strCurrentInformation.lastIndexOf(")")));
-				
-				m_rdbUseRandomMACAddress.setEnabled( true );
-				m_rdbSpecifyFullAddress.setEnabled( true );
-				for ( int intIndex = 0; intIndex < 6; intIndex += 1 )
-					m_atxtMACFullAddress[intIndex].setEnabled( true );
-				m_btnSpecifyManufacturerAddress.setEnabled( true );
+				m_lblCurrentMACAddress.setText(m_strCURRENT_MAC_ADDRESS_HEADER + astrResult[0]);
+				m_lblCurrentManufacturer.setText(m_strCURRENT_MANUFACTURER_HEADER + astrResult[1]);
 			}
 		}
 		catch (Exception excError)
@@ -210,22 +196,20 @@ public class FOtherToolsMACChanger extends CAircrackWindow implements ActionList
 		try
 		{
 			String strInterface = m_aclsNetworkInterfaces[m_cboInterfaces.GetSelectedItem().GetValue()].GetInterface();
-			String astrCommands[] = new String[] {"macchanger"};
 			String strFullAddress = "";
 			CNetworkInterface clsInterface = new CNetworkInterface( strInterface );
 			
-			for ( int intIndex = 0; intIndex < m_atxtMACFullAddress.length; intIndex += 1)
-			{
-				if ( strFullAddress != "" )
-					strFullAddress += ":";
-				strFullAddress += m_atxtMACFullAddress[intIndex].getText();
-			}
-			
 			if ( m_rdbSpecifyFullAddress.isSelected( ) == true )
 			{
-				Matcher mhrMatcher = m_ptnMACAddressFormat.matcher(strFullAddress);
-				if (mhrMatcher.find( ))
-					astrCommands = CAircrackUtilities.AddArgumentToCommand("m", strFullAddress, astrCommands);
+				for ( int intIndex = 0; intIndex < m_atxtMACFullAddress.length; intIndex += 1)
+				{
+					if ( strFullAddress != "" )
+						strFullAddress += ":";
+					strFullAddress += m_atxtMACFullAddress[intIndex].getText();
+				}
+				
+				if (CAircrackUtilities.ValidMACAddress(strFullAddress))
+					clsInterface.SetMACAddress(strFullAddress);
 				else
 				{
 					JOptionPane.showMessageDialog(null, "Invalid MAC Address");
@@ -233,13 +217,6 @@ public class FOtherToolsMACChanger extends CAircrackWindow implements ActionList
 				}
 			}
 			else if ( m_rdbUseRandomMACAddress.isSelected( ) == true )
-				astrCommands = CAircrackUtilities.AddArgumentToCommand("A", "", astrCommands);
-			
-			astrCommands = CAircrackUtilities.AddArgumentToCommand("", strInterface, astrCommands);
-			
-			if ( m_rdbSpecifyFullAddress.isSelected( ) == true )
-				clsInterface.SetMACAddress(strFullAddress);
-			if ( m_rdbUseRandomMACAddress.isSelected( ) == true )
 				clsInterface.RandomizeMACAddress();
 			
 			btnUpdateInterfaceInformation_Click( );

@@ -337,16 +337,20 @@ public class CNetworkInterface
 			boolean blnMACChangerInstalled = CGlobals.clsLocalMachine.ProgramInstalled("macchanger");
 			CProcess clsChangeMAC = null;
 			String astrCommand[] = null;
+			CMACChangerProcess clsMACChanger = new CMACChangerProcess();
 			
 			TakeDown();
 			
 			if (blnMACChangerInstalled)
-				astrCommand = new String[] {"macchanger", "-m", strFullAddress};
+			{
+				clsMACChanger.SetSpecificMAC(m_strInterfaceName, strFullAddress);
+			}
 			else
+			{
 				astrCommand = new String[] {"ifconfig", m_strInterfaceName, "hw", "ether", strFullAddress};
-			
-			clsChangeMAC = new CProcess(astrCommand, true, true, true);
-			clsChangeMAC.CloseProcess();
+				clsChangeMAC = new CProcess(astrCommand, true, true, true);
+				clsChangeMAC.CloseProcess();
+			}
 			
 			BringUp();
 			
@@ -370,13 +374,11 @@ public class CNetworkInterface
 			boolean blnMACChangerInstalled = CGlobals.clsLocalMachine.ProgramInstalled("macchanger");
 			CProcess clsChangeMAC = null;
 			String astrCommand[] = null;
-			
+			CMACChangerProcess clsMACChanger = new CMACChangerProcess();
 			TakeDown();
 			
 			if (blnMACChangerInstalled)
-			{
-				astrCommand = new String[] {"macchanger", "-A"};
-			}
+				clsMACChanger.SetRandomMAC(m_strInterfaceName);
 			else
 			{
 				String strRandomMACAddress = "";
@@ -393,10 +395,10 @@ public class CNetworkInterface
 				astrCommand = new String[] {"ifconfig", m_strInterfaceName, "hw", "ether", strRandomMACAddress};
 				
 				m_strMACAddress = strRandomMACAddress;
-			}
 				
-			clsChangeMAC = new CProcess(astrCommand, true, true, true);
-			clsChangeMAC.CloseProcess();
+				clsChangeMAC = new CProcess(astrCommand, true, true, true);
+				clsChangeMAC.CloseProcess();
+			}
 			
 			BringUp();
 			

@@ -94,10 +94,8 @@ public class DSpecifyManufacturer extends CAircrackDialog implements ActionListe
 	{
 		try
 		{
-			String astrCommand[] = new String[] {"macchanger", "--list=" + m_txtManufacturerName.getText()};
-			boolean blnContinueSearch = false;
+			boolean blnContinueSearch = true;
 			boolean blnNonWirelessMACs = true;
-			CProcess clsMACChangerSearch = null;
 			BufferedReader brOutput = null;
 			String strBuffer = "";
 			
@@ -108,13 +106,11 @@ public class DSpecifyManufacturer extends CAircrackDialog implements ActionListe
 				blnContinueSearch = CAircrackUtilities.ConvertIntegerToBoolean(JOptionPane.showConfirmDialog(null, "You are doing an empty search that will pull back all manufacturers. This could take a while. Do you want to continue?", "Aircrack-NGUI", JOptionPane.YES_NO_OPTION));
 				blnContinueSearch = !blnContinueSearch; // OK is 0, No is 1. Need to flip the boolean
 			}
-			else
-				blnContinueSearch = true;
 			
 			if ( blnContinueSearch )
 			{
-				clsMACChangerSearch = new CProcess(astrCommand, true, true, false);
-				brOutput = new BufferedReader( clsMACChangerSearch.GetOutput( ) );
+				CMACChangerProcess clsMACChangerSearch = new CMACChangerProcess();
+				brOutput = new BufferedReader(clsMACChangerSearch.GetOutput());
 				strBuffer = brOutput.readLine( );
 				
 				while ( strBuffer != null )
