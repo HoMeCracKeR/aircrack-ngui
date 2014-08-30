@@ -140,7 +140,7 @@ public class FDiscoverNetworksResults extends CAircrackWindow implements Compone
         	try
         	{
         		String strBuffer = "";
-        		if ( m_clsWashScan != null && m_brWashOutput != null )
+        		if ( m_clsWash != null && m_brWashOutput != null )
             	{
             		if ( m_brWashOutput.ready( ) )
             		{
@@ -710,7 +710,7 @@ public class FDiscoverNetworksResults extends CAircrackWindow implements Compone
     private String m_strMonitorModeInterface = "";
     private String m_strIWDevInterface = "";
     private CProcess m_clsRunningSearch = null;
-    private CProcess m_clsWashScan = null;
+    private CWashProcess m_clsWash = null;
     private java.util.Timer m_timUpdateScreen = null;
     private java.util.Timer m_timUpdateNetworkESSIDs = null;
     private CTable m_tblNetworkResults = null;
@@ -1382,9 +1382,10 @@ public class FDiscoverNetworksResults extends CAircrackWindow implements Compone
             if ( m_strWashScanInterface.equals("") == false )
             {
             	String astrWashCommand[] = new String[] {"wash", "-i", m_strWashScanInterface, "--ignore-fcs"};
-            	m_clsWashScan = new CProcess(astrWashCommand, true, false, true);
+            	m_clsWash = new CWashProcess();
+            	m_clsWash.StartWashScan(m_strWashScanInterface);
             	m_intWashScanProcessID = CGlobals.clsLocalMachine.GetProcessIDFromLastRunningProcess("wash");
-            	m_brWashOutput = new BufferedReader( m_clsWashScan.GetOutput( ) );
+            	m_brWashOutput = new BufferedReader( m_clsWash.GetOutput( ) );
             }
         }
         catch (Exception excError)
@@ -1550,7 +1551,7 @@ public class FDiscoverNetworksResults extends CAircrackWindow implements Compone
             	{
             		JOptionPane.showMessageDialog(null, "Could not kill wash process (PID " + String.valueOf(m_intWashScanProcessID) + "). Please manually destroy it.");
             	}
-            	m_clsWashScan.CloseProcess();
+            	m_clsWash.CloseProcess();
             }
             
             m_clsRunningSearch.CloseProcess();
