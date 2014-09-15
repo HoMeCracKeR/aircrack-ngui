@@ -56,4 +56,5 @@ The following tools/features are planned but haven't been implemented yet:
 <li>TOR Network</li>
 <li>Evilgrade</li>
 <li>MDK (Murder Death Kill)</li>
+<li>Mimikatz</li>
 </ul>
