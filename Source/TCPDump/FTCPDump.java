@@ -193,10 +193,17 @@ public class FTCPDump extends CAircrackWindow
 	{
 		try
 		{
-			m_cboDumpPacketMatchingCode.SetSorted( false );
-			m_cboDumpPacketMatchingCode.AddItemToList("Human Readable Format", 0);
-			m_cboDumpPacketMatchingCode.AddItemToList("C Program Fragment", 1);
-			m_cboDumpPacketMatchingCode.AddItemToList("Decimal Numbers", 2);
+			m_cboDumpPacketMatchingCode.SetSorted(false);
+			
+			CTCPDumpProcess.udtPacketMatchingCodeType audtPacketCodes[] = CTCPDumpProcess.udtPacketMatchingCodeType.values();
+			for (CTCPDumpProcess.udtPacketMatchingCodeType udtPacketCode : audtPacketCodes)
+			{
+				String strName = udtPacketCode.toString();
+				strName = strName.toLowerCase();
+				strName = strName.replaceAll("_",  " ");
+				strName = CAircrackUtilities.ToProperCase(strName);
+				m_cboDumpPacketMatchingCode.AddItemToList(strName, 0);
+			}
 			m_cboDumpPacketMatchingCode.SetSelectedIndex( 0 );
 		}
 		catch (Exception excError)
@@ -213,23 +220,13 @@ public class FTCPDump extends CAircrackWindow
 	{
 		try
 		{
-			String astrCommand[] = new String[] {"tcpdump", "-D"};
-			CProcess clsInterfaces = new CProcess(astrCommand, true, true, false);
-			BufferedReader brOutput = new BufferedReader( clsInterfaces.GetOutput( ) );
-			String strBuffer = brOutput.readLine( );
 			m_cboInterface.SetSorted( false );
 			
-			while ( strBuffer != null )
-			{
-				if ( strBuffer.contains("(") == true )
-					strBuffer = strBuffer.substring(0, strBuffer.indexOf("("));
-				
-				strBuffer = strBuffer.substring(strBuffer.indexOf(".") + 1);
-				
-				m_cboInterface.AddItemToList(strBuffer, 0);
-				
-				strBuffer = brOutput.readLine( );
-			}
+			CTCPDumpProcess clsTCPDump = new CTCPDumpProcess();
+			String[] astrInterfaces = clsTCPDump.GetAvailableInterfaces();
+			
+			for (String strInterface : astrInterfaces)
+				m_cboInterface.AddItemToList(strInterface, 0);
 			
 			m_cboInterface.SetSelectedIndex( 0 );
 		}
@@ -247,13 +244,18 @@ public class FTCPDump extends CAircrackWindow
 	{
 		try
 		{
-			m_cboVerbosityLevel.SetSorted( false );
-			m_cboVerbosityLevel.AddItemToList("Verbose", 0);
-			m_cboVerbosityLevel.AddItemToList("Verboser", 1);
-			m_cboVerbosityLevel.AddItemToList("Verbosest", 2);
-			m_cboVerbosityLevel.AddItemToList("Quiet", 3);
-			m_cboVerbosityLevel.SetSelectedIndex( 0 );
+			m_cboVerbosityLevel.SetSorted(false);
 			
+			CTCPDumpProcess.udtVerbosityType audtVerbosityLevels[] = CTCPDumpProcess.udtVerbosityType.values();
+			for (CTCPDumpProcess.udtVerbosityType udtVerbosityLevel : audtVerbosityLevels)
+			{
+				String strName = udtVerbosityLevel.toString();
+				strName = strName.toLowerCase();
+				strName = strName.replaceAll("_",  " ");
+				strName = CAircrackUtilities.ToProperCase(strName);
+				m_cboVerbosityLevel.AddItemToList(strName, 0);
+			}
+			m_cboVerbosityLevel.SetSelectedIndex( 0 );		
 		}
 		catch (Exception excError)
 		{
@@ -269,14 +271,18 @@ public class FTCPDump extends CAircrackWindow
 	{
 		try
 		{
-			m_cboTimestampOptions.SetSorted( false );
-			m_cboTimestampOptions.AddItemToList("None", 0);
-			m_cboTimestampOptions.AddItemToList("Unformatted", 1);
-			m_cboTimestampOptions.AddItemToList("Between Lines", 2);
-			m_cboTimestampOptions.AddItemToList("Default", 3);
-			m_cboTimestampOptions.AddItemToList("Between Now and First", 4);
-			m_cboTimestampOptions.SetSelectedIndex( 0 );
+			m_cboTimestampOptions.SetSorted(false);
 			
+			CTCPDumpProcess.udtTimestampOptionsType audtTimestampOptions[] = CTCPDumpProcess.udtTimestampOptionsType.values();
+			for (CTCPDumpProcess.udtTimestampOptionsType udtTimestampOption : audtTimestampOptions)
+			{
+				String strName = udtTimestampOption.toString();
+				strName = strName.toLowerCase();
+				strName = strName.replaceAll("_",  " ");
+				strName = CAircrackUtilities.ToProperCase(strName);
+				m_cboTimestampOptions.AddItemToList(strName, 0);
+			}
+			m_cboTimestampOptions.SetSelectedIndex( 0 );
 		}
 		catch (Exception excError)
 		{
@@ -292,9 +298,14 @@ public class FTCPDump extends CAircrackWindow
 	{
 		try
 		{
-			m_cboPrintPacketContentsHexOrASCII.SetSorted( false );
-			m_cboPrintPacketContentsHexOrASCII.AddItemToList("HEX", 0);
-			m_cboPrintPacketContentsHexOrASCII.AddItemToList("ASCII", 0);
+			m_cboPrintPacketContentsHexOrASCII.SetSorted(false);
+			
+			CTCPDumpProcess.udtPrintPacketContentsType audtPacketContentTypes[] = CTCPDumpProcess.udtPrintPacketContentsType.values();
+			for (CTCPDumpProcess.udtPrintPacketContentsType udtPacketContentType : audtPacketContentTypes)
+			{
+				String strName = udtPacketContentType.toString();
+				m_cboPrintPacketContentsHexOrASCII.AddItemToList(strName, 0);
+			}
 			m_cboPrintPacketContentsHexOrASCII.SetSelectedIndex( 0 );
 		}
 		catch (Exception excError)
@@ -333,87 +344,39 @@ public class FTCPDump extends CAircrackWindow
 	{
 		try
 		{
+			CTCPDumpProcess clsTCPDump = new CTCPDumpProcess();
 			
-			String astrCommand[] = new String[] { "tcpdump" };
+			clsTCPDump.SetExpression(m_txtExpression.getText().trim());
 			
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkPrintPacketsInASCII, "A", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkPrintInASDOTNotation, "b", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkPrintLinkLevelHeader, "e", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkNumericOutputForeignAddresses, "f", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDetect80211DraftMeshHeaders, "H", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkInterfaceToMonitorMode, "I", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDontVerifyCheckSums, "K", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkNumericOutputLocalAddresses, "n", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDontShowFullyQualifiedNames, "N", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkPreventPremiscuousMode, "p", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkPrintAbsoluteTCPSequenceNumbers, "S", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkPrintUndecodedNFSHandles, "u", "", astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDontSaveFilesAsRoot, "Z", "", astrCommand);
+			if (m_chkPrintPacketsInASCII.isSelected())							clsTCPDump.PrintPacketsInASCII();
+			if (m_chkPrintInASDOTNotation.isSelected())							clsTCPDump.PrintInASDOTNotation();
+			if (m_chkPrintLinkLevelHeader.isSelected())							clsTCPDump.PrintLinkLevelHeader();
+			if (m_chkNumericOutputForeignAddresses.isSelected())				clsTCPDump.NumericOutputForeignAddresses();
+			if (m_chkDetect80211DraftMeshHeaders.isSelected())					clsTCPDump.Detect80211DraftMeshHeaders();
+			if (m_chkInterfaceToMonitorMode.isSelected())						clsTCPDump.InterfaceToMonitorMode();
+			if (m_chkDontVerifyCheckSums.isSelected())							clsTCPDump.DontVerifyChecksums();
+			if (m_chkNumericOutputLocalAddresses.isSelected())					clsTCPDump.NumericOutputLocalAddresses();
+			if (m_chkDontShowFullyQualifiedNames.isSelected())					clsTCPDump.DontShowFullyQualifiedNames();
+			if (m_chkPreventPremiscuousMode.isSelected())						clsTCPDump.PreventPremiscuousMode();
+			if (m_chkPrintAbsoluteTCPSequenceNumbers.isSelected())				clsTCPDump.PrintAbsoluteTCPSequenceNumbers();
+			if (m_chkPrintUndecodedNFSHandles.isSelected())						clsTCPDump.PrintUndecodedNFSHandles();
+			if (m_chkDontSaveFilesAsRoot.isSelected())							clsTCPDump.DontSaveFilesAsRoot();
+			if (m_chkOperatingSystemCaptureBufferSize.isSelected())				clsTCPDump.SetOperatingSystemCaptureBufferSizeKB(Integer.parseInt(m_txtOperatingSystemCaptureBufferSize.getText( ).trim( )));
+			if (m_chkExitAfterReceivingPackets.isSelected())					clsTCPDump.SetExitAfterReceivingNumberOfPackets(Integer.parseInt(m_txtExitAfterReceivingPackets.getText( ).trim( )));
+			if (m_chkMaximumFileSize.isSelected())								clsTCPDump.SetMaximumFileSizeMB(Integer.parseInt(m_txtMaximumFileSize.getText( ).trim( )));
+			if (m_chkNewDumpFileEverySecond.isSelected())						clsTCPDump.SetNewDumpFileSeconds(Integer.parseInt(m_txtNewDumpFileEverySecond.getText( ).trim( )));
+			if (m_chkInterface.isSelected())									clsTCPDump.SetInterface(m_cboInterface.GetSelectedItemName( ));
+			if (m_chkReadPacketsFromFile.isSelected())							clsTCPDump.SetReadPacketsFile(m_txtReadPacketsFromFile.getText( ).trim( ));
+			if (m_chkWritePacketsToFile.isSelected())							clsTCPDump.SetWritePacketsToFile(m_txtWritePacketsToFile.getText( ).trim( ));
+			if (m_chkDumpPacketMatchingCode.isSelected())						clsTCPDump.SetDumpPacketMatchingCode(CTCPDumpProcess.udtPacketMatchingCodeType.values()[m_cboDumpPacketMatchingCode.GetSelectedIndex()]);
+			if (m_chkVerbosityLevel.isSelected())								clsTCPDump.SetVerbosity(CTCPDumpProcess.udtVerbosityType.values()[m_cboVerbosityLevel.GetSelectedIndex()]);
+			if (m_chkTimestampOptions.isSelected())								clsTCPDump.SetTimestampOptions(CTCPDumpProcess.udtTimestampOptionsType.values()[m_cboTimestampOptions.GetSelectedIndex()]);
+			if (m_chkPrintPacketContents.isSelected())							clsTCPDump.SetPrintPacketContentsType(CTCPDumpProcess.udtPrintPacketContentsType.values()[m_cboPrintPacketContentsHexOrASCII.GetSelectedIndex()]);
+			if (m_chkPrintPacketContentsIncludeLinkLevelHeader.isSelected())	clsTCPDump.IncludeLinkLevelHeader();
+
+			clsTCPDump.Start();
 			
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkOperatingSystemCaptureBufferSize, "B", m_txtOperatingSystemCaptureBufferSize.getText( ).trim( ), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkExitAfterReceivingPackets, "c", m_txtExitAfterReceivingPackets.getText( ).trim( ), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkMaximumFileSize, "C", m_txtMaximumFileSize.getText( ).trim( ), astrCommand);
-			if ( m_chkDumpPacketMatchingCode.isSelected( ) == true )
-			{
-				if ( m_cboDumpPacketMatchingCode.GetSelectedItemName( ).equals("Human Readable Format") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-d", astrCommand);
-				else if ( m_cboDumpPacketMatchingCode.GetSelectedItemName( ).equals("C Program Fragment") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-dd", astrCommand);
-				else if ( m_cboDumpPacketMatchingCode.GetSelectedItemName( ).equals("Decimal Numbers") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-ddd", astrCommand);
-			}
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkNewDumpFileEverySecond, "G", m_txtNewDumpFileEverySecond.getText( ).trim( ), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkInterface, "i", m_cboInterface.GetSelectedItemName( ), astrCommand);
-			if ( m_chkVerbosityLevel.isSelected( ) == true )
-			{
-				m_cboVerbosityLevel.AddItemToList("Verboser", 1);
-				m_cboVerbosityLevel.AddItemToList("Verbosest", 2);
-				m_cboVerbosityLevel.AddItemToList("Quiet", 3);
-				if ( m_cboVerbosityLevel.GetSelectedItemName( ).equals("Verbose") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-v", astrCommand);
-				else if ( m_cboVerbosityLevel.GetSelectedItemName( ).equals("Verboser") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-vv", astrCommand);
-				else if ( m_cboVerbosityLevel.GetSelectedItemName( ).equals("Verbosest") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-vvv", astrCommand);
-				else if ( m_cboVerbosityLevel.GetSelectedItemName( ).equals("Quiet") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("q", astrCommand);
-			}
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkReadPacketsFromFile, "r", m_txtReadPacketsFromFile.getText( ).trim( ), astrCommand);
-			if ( m_chkTimestampOptions.isSelected( ) == true )
-			{
-				if ( m_cboTimestampOptions.GetSelectedItemName( ).equals("None") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-t", astrCommand);
-				else if ( m_cboTimestampOptions.GetSelectedItemName( ).equals("Unformatted") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-tt", astrCommand);
-				else if ( m_cboTimestampOptions.GetSelectedItemName( ).equals("Between Lines") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-ttt", astrCommand);
-				else if ( m_cboTimestampOptions.GetSelectedItemName( ).equals("Default") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-tttt", astrCommand);
-				else if ( m_cboTimestampOptions.GetSelectedItemName( ).equals("Between Now and First") )
-					astrCommand = CAircrackUtilities.AddArgumentToArray("-ttttt", astrCommand);
-			}
-			astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkWritePacketsToFile, "w", m_txtWritePacketsToFile.getText( ).trim( ), astrCommand);
-			if ( m_chkPrintPacketContents.isSelected( ) == true )
-			{
-				if ( m_cboPrintPacketContentsHexOrASCII.GetSelectedItemName( ).equals("HEX") )
-				{
-					if ( m_chkPrintPacketContentsIncludeLinkLevelHeader.isSelected( ) == true )
-						astrCommand = CAircrackUtilities.AddArgumentToArray("-xx", astrCommand);
-					else
-						astrCommand = CAircrackUtilities.AddArgumentToArray("-x", astrCommand);
-				}
-				else if ( m_cboPrintPacketContentsHexOrASCII.GetSelectedItemName( ).equals("ASCII") )
-				{
-					if ( m_chkPrintPacketContentsIncludeLinkLevelHeader.isSelected( ) == true )
-						astrCommand = CAircrackUtilities.AddArgumentToArray("-XX", astrCommand);
-					else
-						astrCommand = CAircrackUtilities.AddArgumentToArray("-X", astrCommand);					
-				}
-			}
-			
-			astrCommand = CAircrackUtilities.AddArgumentToArray(m_txtExpression.getText( ).trim( ), astrCommand);
-			
-			DProgramOutput dlgOutput = new DProgramOutput("TCP Dump Results", astrCommand);
+			DProgramOutput dlgOutput = new DProgramOutput("TCP Dump Results", clsTCPDump, false);
 			dlgOutput.setVisible( true );
 			
 		}
