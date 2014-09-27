@@ -1,5 +1,4 @@
 // Imports
-import java.util.*;
 
 /**
  * Class used to encapulate calls to aircrack-ng (part of the aircrack-ng suite).

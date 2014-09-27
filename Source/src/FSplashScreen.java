@@ -12,7 +12,8 @@ import java.util.Calendar;
  */
 public class FSplashScreen extends CAircrackWindow
 {
-
+	protected final static long serialVersionUID = 1L;
+	
 	// Controls
 	private JLabel m_lblHeadingLabel = null;
 	private JLabel m_lblSubHeadingLabel = null;

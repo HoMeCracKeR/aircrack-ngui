@@ -1,5 +1,3 @@
-import javax.swing.JCheckBox;
-
 public class CTelnetProcess extends CProcess
 {
 	public enum udtForceIPVersionType

@@ -1381,7 +1381,6 @@ public class FDiscoverNetworksResults extends CAircrackWindow implements Compone
             
             if ( m_strWashScanInterface.equals("") == false )
             {
-            	String astrWashCommand[] = new String[] {"wash", "-i", m_strWashScanInterface, "--ignore-fcs"};
             	m_clsWash = new CWashProcess();
             	m_clsWash.StartWashScan(m_strWashScanInterface);
             	m_intWashScanProcessID = CGlobals.clsLocalMachine.GetProcessIDFromLastRunningProcess("wash");

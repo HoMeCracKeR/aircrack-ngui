@@ -15,10 +15,7 @@ public class FMain extends CAircrackWindow
 	
     // Main Menu
     private JMenuBar m_mnbMainMenu = null;
-    
-    // Desktop pane (used for MDI)
-    private JDesktopPane m_dtpDesktopPane = null;
-    
+     
     // Setup
     private JMenu m_mnuSetup = null;
     private JMenuItem m_miAddRemoveUtilities = null;
@@ -325,6 +322,7 @@ public class FMain extends CAircrackWindow
     		m_miVirtualTunnel.setEnabled(false);
     		m_miCreateFakeAccessPoint.setEnabled(false);
     		m_miDecloakWEPWPAKey.setEnabled(false);
+    		m_miDeauthenticateHosts.setEnabled(false);
     		
     		m_miSniffFiles.setEnabled(false);
     	    m_miSniffMail.setEnabled(false);

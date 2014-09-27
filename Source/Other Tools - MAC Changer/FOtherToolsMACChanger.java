@@ -31,8 +31,6 @@ public class FOtherToolsMACChanger extends CAircrackWindow implements ActionList
 	private final String m_strCURRENT_MAC_ADDRESS_HEADER = "Current MAC:                              ";
 	private final String m_strCURRENT_MANUFACTURER_HEADER = "Current Manufacturer:              ";
 	
-	private Pattern m_ptnMACAddressFormat = Pattern.compile("[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}");
-		
 	// --------------------------------------------------------------------------------
 	// Name: FOtherToolsMACChanger
 	// Abstract: Class constructor
