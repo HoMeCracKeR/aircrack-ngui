@@ -191,23 +191,23 @@ public class FSniffPasswords extends CAircrackWindow implements ActionListener
     {
     	try
     	{
-    		String astrCommand[] = new String[] { "dsniff" };
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkHalfDuplexTCPStreamReassembly, "c", "", astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDebuggingMode, "c", "", astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkAutomaticProtocolDetection, "m", "", astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDontResolveToHostnames, "n", "", astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSpecifyInterface, "i", m_cboSpecifyInterface.GetSelectedItemName( ), astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSpecifyPCAPFile, "p", m_txtSpecifyPCAPFile.getText( ).trim( ), astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSpecifySnapLenBytes, "s", m_txtSpecifySnapLenBytes.getText( ).trim( ), astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkLoadTriggersFromServicesFile, "f", m_txtLoadTriggersFromServicesFile.getText( ).trim( ), astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSpecifyTriggers, "t", m_txtSpecifyTriggers.getText( ).trim( ), astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkLoadFromSaveFile, "r", m_txtLoadFromSaveFile.getText( ).trim( ), astrCommand);
-    		astrCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkWriteOutToFile, "w", m_txtWriteOutToFile.getText( ).trim( ), astrCommand);
+    		CDSniffProcess clsDSniff = new CDSniffProcess();
     		
-    		if ( m_txtExpression.getText( ).equals( "" ) == false )
-    			astrCommand = CAircrackUtilities.AddArgumentToArray(m_txtExpression.getText( ).trim( ), astrCommand);
+    		clsDSniff.SetExpression(m_txtExpression.getText().trim());
     		
-    		DProgramOutput dlgOutput = new DProgramOutput("Sniff Passwords - Output", astrCommand);
+    		if (m_chkHalfDuplexTCPStreamReassembly.isSelected())		clsDSniff.UseHalfDuplexTCPStreamReassembly();
+    		if (m_chkDebuggingMode.isSelected())						clsDSniff.UseDebuggingMode();
+    		if (m_chkAutomaticProtocolDetection.isSelected())			clsDSniff.UseAutomaticProtocolDetection();
+    		if (m_chkDontResolveToHostnames.isSelected())				clsDSniff.DontResolveToHostNames();
+    		if (m_chkSpecifyInterface.isSelected())						clsDSniff.SetInterface(m_cboSpecifyInterface.GetSelectedItemName());
+    		if (m_chkSpecifyPCAPFile.isSelected())						clsDSniff.SetPCAPFile(m_txtSpecifyPCAPFile.getText().trim());
+    		if (m_chkSpecifySnapLenBytes.isSelected())					clsDSniff.SetSnapLenBytes(Integer.parseInt(m_txtSpecifySnapLenBytes.getText().trim()));
+    		if (m_chkLoadTriggersFromServicesFile.isSelected())			clsDSniff.SetServicesFile(m_txtLoadTriggersFromServicesFile.getText().trim());
+    		if (m_chkSpecifyTriggers.isSelected())						clsDSniff.SetTriggers(m_txtSpecifyTriggers.getText().trim());
+    		if (m_chkLoadFromSaveFile.isSelected())						clsDSniff.SetSaveFile(m_txtLoadFromSaveFile.getText().trim());
+    		if (m_chkWriteOutToFile.isSelected())						clsDSniff.SetWriteFile(m_txtWriteOutToFile.getText().trim());
+    		
+    		DProgramOutput dlgOutput = new DProgramOutput("Sniff Passwords - Output", clsDSniff, false);
     		dlgOutput.setVisible( true );
     	}
     	catch (Exception excError)
