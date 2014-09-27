@@ -242,9 +242,11 @@ public class FOtherToolsReaver extends CAircrackWindow implements ActionListener
 	{
 		try
 		{
-			m_cboVerbosityLevel.AddItemToList("Verbose", 0);
-			m_cboVerbosityLevel.AddItemToList("Really Verbose", 1);
-			m_cboVerbosityLevel.AddItemToList("Quiet", 2);
+			m_cboVerbosityLevel.SetSorted(false);
+			
+			CReaverProcess.udtVerbosityType[] audtVerbosityLevels = CReaverProcess.udtVerbosityType.values();
+			for (CReaverProcess.udtVerbosityType udtVerbosityLevel : audtVerbosityLevels)
+				m_cboVerbosityLevel.AddItemToList(CAircrackUtilities.ToProperCase(udtVerbosityLevel.toString().toLowerCase()), 0);
 			
 			m_cboVerbosityLevel.SetSelectedIndex( 0 );
 		}
@@ -448,20 +450,20 @@ public class FOtherToolsReaver extends CAircrackWindow implements ActionListener
 	{
 		try
 		{
-			String astrCommand[] = new String[] {"reaver"};
+			CReaverProcess clsReaver = new CReaverProcess();
 			
 			// Add the required settings
-			astrCommand = CAircrackUtilities.AddArgumentToCommand("i", m_cboMonitorInterface.GetSelectedItemName(), astrCommand);
-			astrCommand = CAircrackUtilities.AddArgumentToCommand("b", m_txtNetworkBSSID.getText().trim(), astrCommand);
+			clsReaver.SetInterface(m_cboMonitorInterface.GetSelectedItemName());
+			clsReaver.SetNetworkBSSID(m_txtNetworkBSSID.getText().trim());
 			
 			// Add the optional settings
-			astrCommand = AddOptionalSettings( astrCommand );
+			AddOptionalSettings( clsReaver );
 				
 			// Add the advanced settings
-			astrCommand = AddAdvancedSettings( astrCommand );
+			AddAdvancedSettings( clsReaver );
 			
 			// Run the command and show the results
-			DProgramOutput dlgProgramOutput = new DProgramOutput("Reaver Output", astrCommand);
+			DProgramOutput dlgProgramOutput = new DProgramOutput("Reaver Output", clsReaver, false);
 			dlgProgramOutput.setVisible( true );
 			
 		}
@@ -475,124 +477,55 @@ public class FOtherToolsReaver extends CAircrackWindow implements ActionListener
 	// Name: AddOptionalSettings
 	// Abstract: Adds the optional settings to the command
 	// --------------------------------------------------------------------------------
-	private String[] AddOptionalSettings( String astrCommand[] )
+	private void AddOptionalSettings( CReaverProcess clsReaver )
 	{
-		String astrNewArray[] = null;
 		try
 		{
-			astrNewArray = astrCommand;
-			
-			// Host System MAC
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkSetHostSystemMAC, "m", m_txtSetHostSystemMAC.getText(), astrNewArray);
-			
-			// Network ESSID
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkSetNetworkESSID, "e", m_txtSetNetworkESSID.getText(), astrNewArray);
-			
-			// Channel
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkSetChannel, "c", m_cboSetChannel.GetSelectedItemName(), astrNewArray);
-
-			// Output File
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkSetOutFile, "o", m_txtSetOutFile.getText(), astrNewArray);
-
-			// Restore Session
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkRestoreSession, "s", m_txtRestoreSession.getText(), astrNewArray);
-
-			// Execute Command
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkExecuteCommand, "C", m_txtExecuteCommand.getText(), astrNewArray);
-			
-			// Daemonize
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkDaemonize, "D", "", astrNewArray);
-			
-			// Auto-detect Settings
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkAutoDetectSettings, "a", "", astrNewArray);
-			
-			// Fixed Channel
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chkFixedChannel, "f", "", astrNewArray);
-			
-			// 5 GHz Channels
-			astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chk5GHzChannels, "5", "", astrNewArray);
-			
-			// Verbosity
-			if ( m_chkSetVerbosity.isSelected( ) == true )
-			{
-				if ( m_cboVerbosityLevel.GetSelectedItemValue( ) == 0 )			// Verbose
-					astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chk5GHzChannels, "v", "", astrNewArray);
-				else if ( m_cboVerbosityLevel.GetSelectedItemValue( ) == 1 )	// Really Verbose
-					astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chk5GHzChannels, "vv", "", astrNewArray);
-				else if ( m_cboVerbosityLevel.GetSelectedItemValue( ) == 2 )	// Quiet
-					astrNewArray = CAircrackUtilities.AddArgumentIfChecked(m_chk5GHzChannels, "q", "", astrNewArray);
-			}
-			
+			if (m_chkSetHostSystemMAC.isSelected())		clsReaver.SetHostSystemMAC(m_txtSetHostSystemMAC.getText());
+			if (m_chkSetNetworkESSID.isSelected())		clsReaver.SetNetworkESSID(m_txtSetNetworkESSID.getText());
+			if (m_chkSetChannel.isSelected())			clsReaver.SetChannel(Integer.parseInt(m_cboSetChannel.GetSelectedItemName()));
+			if (m_chkSetOutFile.isSelected())			clsReaver.SetOutputFile(m_txtSetOutFile.getText());
+			if (m_chkRestoreSession.isSelected())		clsReaver.SetRestoreSessionFile(m_txtRestoreSession.getText());
+			if (m_chkExecuteCommand.isSelected())		clsReaver.SetCommandToExecute(m_txtExecuteCommand.getText());
+			if (m_chkDaemonize.isSelected())			clsReaver.Daemonize();
+			if (m_chkAutoDetectSettings.isSelected())	clsReaver.AutoDetectSettings();
+			if (m_chkFixedChannel.isSelected())			clsReaver.UseFixedChannel();
+			if (m_chk5GHzChannels.isSelected())			clsReaver.Use5GHzChannels();
+			if (m_chkSetVerbosity.isSelected())			clsReaver.SetVerbosity(CReaverProcess.udtVerbosityType.values()[m_cboVerbosityLevel.GetSelectedIndex()]);
 		}
 		catch (Exception excError)
 		{
 			CUtilities.WriteLog(excError);
 		}
-		return astrNewArray;
 	}
 
 	// --------------------------------------------------------------------------------
 	// Name: AddAdvancedSettings
 	// Abstract: Adds the advanced settings to the command
 	// --------------------------------------------------------------------------------
-	private String[] AddAdvancedSettings( String astrCommand[] )
+	private void AddAdvancedSettings( CReaverProcess clsReaver )
 	{
-		String astrNewCommand[] = null;
 		try
 		{
-			
-			astrNewCommand = astrCommand;
-			
-			// WPS Pin
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSpecifyWPSPin, "p", m_txtSpecifyWPSPin.getText(), astrNewCommand);
-			
-			// Delay Between Attempts
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSetDelayBetweenAttempts, "d", m_txtSetDelayBetweenAttempts.getText(), astrNewCommand);
-			
-			// Lock Delay
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkLockDelay, "l", m_txtLockDelay.getText(), astrNewCommand);
-			
-			// Max Attempts
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSetMaxAttempts, "g", m_txtSetMaxAttempts.getText(), astrNewCommand);
-			
-			// Fail Wait
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSetFailWait, "x", m_txtSetFailWait.getText(), astrNewCommand);
-
-			// Recurring Delay
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSetRecurringDelay, "r", m_txtSetRecurringDelay.getText(), astrNewCommand);
-
-			// Timeout
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkSetTimeout, "t", m_txtSetTimeout.getText(), astrNewCommand);
-			
-			// M57 Timeout
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkM57Timeout, "T", m_txtM57Timeout.getText(), astrNewCommand);
-			
-			// Do Not Associate
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDoNotAssociate, "A", "", astrNewCommand);
-			
-			// Do Not Send NACKs
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkDoNotSendNACKs, "N", "", astrNewCommand);
-			
-			// Use Small DH Keys
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkUseSmallDHKeys, "S", "", astrNewCommand);
-			
-			// Ignore Locks
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkIgnoreLocks, "L", "", astrNewCommand);
-			
-			// EAP Terminate
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkEAPTerminate, "E", "", astrNewCommand);
-			
-			// Always Send NACKs
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkAlwaysSendNACKs, "n", "", astrNewCommand);
-			
-			// Mimick Windows 7 Registrar
-			astrNewCommand = CAircrackUtilities.AddArgumentIfChecked(m_chkMimickWindows7Registrar, "w", "", astrNewCommand);
-
+			if (m_chkSpecifyWPSPin.isSelected())				clsReaver.SetWPSPin(m_txtSpecifyWPSPin.getText().trim());
+			if (m_chkSetDelayBetweenAttempts.isSelected())		clsReaver.SetDelayBetweenAttempts(Integer.parseInt(m_txtSetDelayBetweenAttempts.getText()));
+			if (m_chkLockDelay.isSelected())					clsReaver.SetLockDelay(Integer.parseInt(m_txtLockDelay.getText().trim()));
+			if (m_chkSetMaxAttempts.isSelected())				clsReaver.SetMaximumAttempts(Integer.parseInt(m_txtSetMaxAttempts.getText().trim()));
+			if (m_chkSetFailWait.isSelected())					clsReaver.SetFailWait(Integer.parseInt(m_txtSetFailWait.getText().trim()));
+			if (m_chkSetRecurringDelay.isSelected())			clsReaver.SetRecurringDelay(Integer.parseInt(m_txtSetRecurringDelay.getText().trim()));
+			if (m_chkSetTimeout.isSelected())					clsReaver.SetTimeout(Integer.parseInt(m_txtSetTimeout.getText().trim()));
+			if (m_chkM57Timeout.isSelected())					clsReaver.SetM57Timeout(Integer.parseInt(m_txtM57Timeout.getText().trim()));
+			if (m_chkDoNotAssociate.isSelected())				clsReaver.DoNotAssociate();
+			if (m_chkDoNotSendNACKs.isSelected())				clsReaver.DoNotSendNACKs();
+			if (m_chkUseSmallDHKeys.isSelected())				clsReaver.UseSmallDHKeys();
+			if (m_chkIgnoreLocks.isSelected())					clsReaver.IgnoreLocks();
+			if (m_chkEAPTerminate.isSelected())					clsReaver.EAPTerminate();
+			if (m_chkAlwaysSendNACKs.isSelected())				clsReaver.AlwaysSendNACKs();
+			if (m_chkMimickWindows7Registrar.isSelected())		clsReaver.MimickWindows7Registrar();
 		}
 		catch (Exception excError)
 		{
 			CUtilities.WriteLog(excError);
 		}
-		return astrNewCommand;
 	}
 }

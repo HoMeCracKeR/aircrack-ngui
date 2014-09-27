@@ -5,10 +5,7 @@
 
 // Includes
 import javax.swing.*;
-
 import org.w3c.dom.*;
-
-import java.awt.SplashScreen;
 import java.io.*;
 
 public class CAircrackNGUI
